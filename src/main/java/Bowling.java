@@ -1,30 +1,57 @@
+import java.util.Objects;
+
 public class Bowling {
 
     public int calculateScore(String results) {
 
         int score = 0;
-        int resultsIndex = 0;
+        double frame = 0;
 
-        String[] characters = results.replace("|", "").split("");
-        for(String c : characters) {
-            if (c.matches("[0-9]")) {
-                score += Integer.parseInt(c);
+        String[] resultsArray = results.replace("|", "").split("");
+        for (int i = 0; i < resultsArray.length; i++) {
+            String ball = resultsArray[i];
+            if(frame == 10) {
+                break;
             }
-            if (c.matches("[X]")) {
-                score += 10;
-                if (characters[resultsIndex + 1].matches("[0-9X]")) {
-                    if (characters[resultsIndex + 1].matches("[X]")) {
-                        score += 10;
-                    } else {
-                        score += results.charAt(resultsIndex + 1);
-                    }
+
+            if (isStrike(ball)) {
+                String nextBall = resultsArray[i + 1];
+                String ballAfterNext = resultsArray[i + 2];
+                if(isSpare(ballAfterNext)) {
+                    score += 20;
+                } else {
+                    score += 10 + convertBallToScore(nextBall) + convertBallToScore(ballAfterNext);
                 }
-                if (characters[resultsIndex + 2].matches("[0-9X]")) {
-                    score += results.charAt(resultsIndex + 2);
-                }
+                frame++;
+            } else if(isSpare(ball)) {
+                String nextBall = resultsArray[i + 1];
+                String previousBall = resultsArray[i - 1];
+                score += 10 - convertBallToScore(previousBall) + convertBallToScore(nextBall);
+                frame += 0.5;
+            } else {
+                score += convertBallToScore(ball);
+                frame += 0.5;
             }
-            resultsIndex++;
         }
         return score;
     }
+
+    public boolean isStrike(String ball) {
+        return Objects.equals(ball, "X");
+    }
+
+    public boolean isSpare(String ball) {
+        return Objects.equals(ball, "/");
+    }
+
+    public int convertBallToScore(String ball) {
+        if (ball.matches("[X]")) {
+            return 10;
+        }
+        if (ball.matches("[-]")) {
+            return 0;
+        }
+            return Integer.parseInt(ball);
+        }
+
 }

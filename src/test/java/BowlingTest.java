@@ -32,4 +32,23 @@ public class BowlingTest {
         Bowling bowling = new Bowling();
         assertEquals(40, bowling.calculateScore("X|X|1-|1-|1-|1-|1-|1-|1-|1-||"));
     }
+
+    @Test
+    public void shouldReturn20WhenFirstFrameIsASpareFollowedBy1ForRemainingFrames() {
+        Bowling bowling = new Bowling();
+        assertEquals(20, bowling.calculateScore("3/|1-|1-|1-|1-|1-|1-|1-|1-|1-||"));
+    }
+
+    @Test
+    public void shouldReturn150WhenWhenEveryFrameIsASpareFollowedBy5ForBonusBall() {
+        Bowling bowling = new Bowling();
+        assertEquals(150, bowling.calculateScore("5/|5/|5/|5/|5/|5/|5/|5/|5/|5/||5"));
+    }
+
+    @Test
+    public void shouldReturn167WhenTheResultsAreIsKatalystDemoStringFour() {
+        Bowling bowling = new Bowling();
+        assertEquals(167, bowling.calculateScore("X|7/|9-|X|-8|8/|-6|X|X|X||81"));
+    }
+
 }
